@@ -1,0 +1,36 @@
+version : '2'
+
+services:
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_DBNAME: sample
+    volumes:
+      - 'mongo:/data/db'
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: sample
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+
+  web:
+    build : .
+    depends_on:
+      - "postgres"
+      - "mongo"
+    ports:
+      - "8080:8080"
+    environment:
+      MONGO_DBNAME : sample
+      POSTGRES: postgres
+      POSTGRES_DB: sample
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: pass
+
+volumes:
+  postgres:
+  mongo:
